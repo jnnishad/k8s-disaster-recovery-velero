@@ -63,3 +63,5 @@ kubectl apply -f schedules/
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+<!-- JN -->
