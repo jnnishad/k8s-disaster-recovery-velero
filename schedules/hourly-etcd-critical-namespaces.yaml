@@ -1,3 +1,4 @@
+---
 # Tighter RPO for stateful, hard-to-regenerate namespaces (databases,
 # message queues). Shorter retention since these are a safety net between
 # the daily full backups, not the primary recovery point.

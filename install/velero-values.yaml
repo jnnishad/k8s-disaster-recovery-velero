@@ -1,3 +1,4 @@
+---
 # Velero Helm values — backend is Minio (S3-compatible), matching the
 # "Setup Minio for Metrics, logs and trace storage" + Velero DR pattern
 # used at NEC India for multi-cluster backup.
@@ -33,8 +34,8 @@ credentials:
 deployNodeAgent: true  # enables Restic/Kopia-based volume backups for non-CSI storage
 
 resources:
-  requests: { cpu: 200m, memory: 256Mi }
-  limits: { cpu: 500m, memory: 512Mi }
+  requests: {cpu: 200m, memory: 256Mi}
+  limits: {cpu: 500m, memory: 512Mi}
 
 metrics:
   enabled: true

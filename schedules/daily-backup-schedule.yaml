@@ -1,3 +1,4 @@
+---
 # Full-cluster daily backup, retained 30 days. Excludes namespaces that
 # are trivially recreated from GitOps (kube-system, monitoring) to keep
 # backup size and restore time down — those come back via
