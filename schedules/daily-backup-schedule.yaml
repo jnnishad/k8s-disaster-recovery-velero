@@ -1,0 +1,19 @@
+# Full-cluster daily backup, retained 30 days. Excludes namespaces that
+# are trivially recreated from GitOps (kube-system, monitoring) to keep
+# backup size and restore time down — those come back via
+# gitops-cicd-pipelines / k8s-observability-stack, not Velero.
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: daily-full-backup
+  namespace: velero
+spec:
+  schedule: "0 2 * * *"
+  template:
+    ttl: 720h0m0s   # 30 days
+    excludedNamespaces:
+      - kube-system
+      - monitoring
+    includeClusterResources: true
+    snapshotVolumes: true
+    hooks: {}

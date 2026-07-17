@@ -1,0 +1,42 @@
+# Velero Helm values — backend is Minio (S3-compatible), matching the
+# "Setup Minio for Metrics, logs and trace storage" + Velero DR pattern
+# used at NEC India for multi-cluster backup.
+# helm repo add vmware-tanzu https://vmware-tanzu.github.io/helm-charts
+# helm install velero vmware-tanzu/velero -f install/velero-values.yaml -n velero --create-namespace
+
+configuration:
+  backupStorageLocation:
+    - name: default
+      provider: aws
+      bucket: k8s-cluster-backups
+      config:
+        region: minio
+        s3ForcePathStyle: true
+        s3Url: http://minio.storage.svc.cluster.local:9000
+  volumeSnapshotLocation:
+    - name: default
+      provider: aws
+      config:
+        region: minio
+
+initContainers:
+  - name: velero-plugin-for-aws
+    image: velero/velero-plugin-for-aws:v1.9.2
+    volumeMounts:
+      - mountPath: /target
+        name: plugins
+
+credentials:
+  useSecret: true
+  existingSecret: velero-minio-credentials
+
+deployNodeAgent: true  # enables Restic/Kopia-based volume backups for non-CSI storage
+
+resources:
+  requests: { cpu: 200m, memory: 256Mi }
+  limits: { cpu: 500m, memory: 512Mi }
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true   # scraped by kube-prometheus-stack, see k8s-observability-stack

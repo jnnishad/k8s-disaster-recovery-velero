@@ -1,0 +1,16 @@
+# Tighter RPO for stateful, hard-to-regenerate namespaces (databases,
+# message queues). Shorter retention since these are a safety net between
+# the daily full backups, not the primary recovery point.
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: hourly-critical-namespaces
+  namespace: velero
+spec:
+  schedule: "0 * * * *"
+  template:
+    ttl: 72h0m0s   # 3 days
+    includedNamespaces:
+      - production-db
+      - production-messaging
+    snapshotVolumes: true
